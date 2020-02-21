@@ -22,9 +22,15 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        button1 = findViewById(R.id.button1);
+        editText = findViewById( R.id.editText );
+        textView2 = findViewById( R.id.textView2 );
+
 
         button1.setOnClickListener(new View.OnClickListener() {
+
             @Override
+
             public void onClick(View v) {
                 text = editText.getText().toString();
                 if (TextUtils.isEmpty(text)){
