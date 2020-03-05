@@ -1,48 +1,48 @@
 package com.example.login;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
+
 public class Home extends AppCompatActivity {
 
-    String text;
+    private TabLayout tabLayout;
+    private AppBarLayout appBarLayout;
+    private  ViewPager viewPager;
 
-    Button button1;
-    TextView textView2;
-    EditText editText;
 
     @Override
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        button1 = findViewById(R.id.button1);
-        editText = findViewById( R.id.editText );
-        textView2 = findViewById( R.id.textView2 );
+        tabLayout = (TabLayout) findViewById(R.id.tablayout_id);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbarid);
+        viewPager = (ViewPager) findViewById( R.id.viewpager_id );
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.AddFragment(new fragment1(), "Fragment_1");
+        adapter.AddFragment( new fragment2(), "Fragment_2" );
+        adapter.AddFragment( new fragment3(), "Fragment_3" );
+
+         viewPager.setAdapter( adapter );
+         tabLayout.setupWithViewPager( viewPager );
 
 
-        button1.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-
-            public void onClick(View v) {
-                text = editText.getText().toString();
-                if (TextUtils.isEmpty(text)){
-                    Toast.makeText(Home.this,
-                            "input kosong", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    textView2.setText(text);
-
-                }
-            }
-        });
 
     }
 

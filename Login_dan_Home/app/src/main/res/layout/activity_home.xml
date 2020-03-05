@@ -1,59 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home">
+    tools:context=".Home"
+    android:orientation="vertical">
 
-
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:elevation="0dp"
+        android:id="@+id/appbarid">
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:id="@+id/viewpager_id">
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="356dp"
-            android:layout_height="59dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/white"
-            android:ems="10"
-            android:hint="KETIK APA SAJA"
-
-
-            android:inputType="textPersonName" />
-
-
-        <Button
-            android:id="@+id/button1"
+        <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="25dp"
-            android:text="SUBMIT" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="40dp"
-            android:text="KETIK APA SAJA"
-            android:gravity="center"
-            android:textSize="20dp" />
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            android:id="@+id/tablayout_id"/>
+    </androidx.viewpager.widget.ViewPager>
+<!--        android:tabTextColor="@color/tabtextcolor"-->
+<!--        android:tabIndicatorColor="@color/tabindicatorcolor"-->
+<!--        android:backgrounds="@color/colorPrimary"-->
 
 
-    </LinearLayout>
+<!--    <android.support.v4.view.ViewPager-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        -->
+<!--        >-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </android.support.v4.view.ViewPager>-->
+
+
+</LinearLayout>
