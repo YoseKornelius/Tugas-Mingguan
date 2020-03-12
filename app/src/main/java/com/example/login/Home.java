@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class Home extends AppCompatActivity {
 
+    boolean session;
     private TabLayout tabLayout;
     private AppBarLayout appBarLayout;
     private  ViewPager viewPager;
@@ -36,7 +38,7 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         pref = getApplicationContext().getSharedPreferences(  " Mypref", MODE_PRIVATE );
         SharedPreferences.Editor editor= pref.edit();
-
+        SESSION();
         editor.putString( "KEY1", "Test Shared References" );
         editor.commit();
 
@@ -62,5 +64,18 @@ public class Home extends AppCompatActivity {
     private void showToast(String text) {
 
         Toast.makeText(Home.this, text, Toast.LENGTH_SHORT).show();
+    }
+    public void SESSION (){
+        session = Boolean.valueOf( Save.read( getApplicationContext(), "session", "false" ));
+            if (!session){
+                Toast.makeText( Home.this, "gak ada akun",Toast.LENGTH_SHORT ).show();
+                Intent register = new Intent( getApplicationContext(), Register.class );
+                startActivity( register );
+                finish();
+            }else{
+                Toast.makeText( this, "You is Logged In", Toast.LENGTH_SHORT ).show();
+
+            }
+
     }
 }

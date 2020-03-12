@@ -14,6 +14,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -119,11 +120,14 @@ public class MainActivity extends AppCompatActivity {
             cursor.moveToFirst();
             String email = cursor.getString( 0 );
             String password = cursor.getString( 1 );
-            SharedPreferences.Editor sp = getSharedPreferences( "Email",MODE_PRIVATE ).edit();
-            sp.putString( "email", email );
-            sp.apply();
+            Save.save( getApplicationContext(), "session","true" );
+//            SharedPreferences.Editor sp = getSharedPreferences( "Email",MODE_PRIVATE ).edit();
+//            sp.putString( "email", email );
+//            sp.apply();
             cursor.close();
+            System.out.println("berhasil");
             return email;
+
         }
         return null;
 
