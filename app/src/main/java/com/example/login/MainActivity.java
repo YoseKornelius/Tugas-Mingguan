@@ -3,7 +3,11 @@ package com.example.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -20,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     String email,password;
     Button button1;
-    EditText editText;
-    EditText editText2;
+    EditText editText; // login
+    EditText editText2; //password
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +52,7 @@ public class MainActivity extends AppCompatActivity {
                             "Email atau Password salah", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    //proses mencocokkan apakah input email valid atau tidak
-                    if ( true ) {
-                        showToast(login);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"Invalid email address", Toast.LENGTH_SHORT).show();
-                    }
-                    Intent in =new Intent(MainActivity.this, Home.class);
-                    startActivity(in);
+                   login();
 
                 }
 
@@ -89,6 +86,47 @@ public class MainActivity extends AppCompatActivity {
     private void showToast(String text) {
 
         Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    public void login(){
+        String Email= editText.getText().toString();
+        String Pass = editText2.getText().toString();
+
+       if(null != checkUser(Email,Pass)){
+
+            String userDB = checkUser( Email,Pass );
+
+            Intent in =new Intent(MainActivity.this, Home.class);
+            in.putExtra( "email", userDB);
+            startActivity(in);
+        }
+        else {
+            Toast.makeText
+                    ( this,"Email atau Password kurang tepat",Toast.LENGTH_LONG ).show();
+            editText.setText( "" );
+            editText2.setText( "" );
+            editText.requestFocus();
+        }
+
+    }
+
+    public  String checkUser(String Email, String Pass){
+        SQLiteDatabase db = openOrCreateDatabase
+                ( "user", Context.MODE_PRIVATE, null );
+        Cursor cursor = db.rawQuery( "select user,pass from user where user = ? and pass =?",
+                new String[]{Email,Pass} );
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            String email = cursor.getString( 0 );
+            String password = cursor.getString( 1 );
+            SharedPreferences.Editor sp = getSharedPreferences( "Email",MODE_PRIVATE ).edit();
+            sp.putString( "email", email );
+            sp.apply();
+            cursor.close();
+            return email;
+        }
+        return null;
+
     }
 
 }
