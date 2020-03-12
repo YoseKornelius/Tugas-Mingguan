@@ -19,13 +19,9 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     String email,password;
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
     Button button1;
     EditText editText;
     EditText editText2;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         button1 = findViewById(R.id.button1);
 
-        // proses toast dan pindah ke activity lain
+        // LOGIN
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,14 +49,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     //proses mencocokkan apakah input email valid atau tidak
-                    if (editText.getText().toString().trim().matches(emailPattern)) {
+                    if ( true ) {
                         showToast(login);
-
-
                     } else {
                         Toast.makeText(getApplicationContext(),"Invalid email address", Toast.LENGTH_SHORT).show();
                     }
-
                     Intent in =new Intent(MainActivity.this, Home.class);
                     startActivity(in);
 
@@ -70,11 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
 
         //membuat tulisan siqn up clickable
         TextView textview = findViewById(R.id.textView2);
@@ -86,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                Toast.makeText(MainActivity.this, "sign up belum jadi", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "sign up belum jadi", Toast.LENGTH_SHORT).show();
+                Intent in =new Intent(MainActivity.this, Register.class);
+                startActivity(in);
             }
         };
 
@@ -94,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         textview.setText(ss);
         textview.setMovementMethod(LinkMovementMethod.getInstance());
-
-
     }
 
     private void showToast(String text) {
