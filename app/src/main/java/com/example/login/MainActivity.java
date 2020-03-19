@@ -2,7 +2,9 @@ package com.example.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
+    private NotificationManagerCompat notificationManager;
     String email,password;
     Button button1;
     EditText editText; // login
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        notificationManager = NotificationManagerCompat.from( this );
 
         editText = findViewById(R.id.editText);
 
@@ -54,11 +58,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                    login();
-
+                   String bandel = editText.getText().toString();
+                   Bundle extras = new Bundle();
+                   extras.putString("KEY", "text" );
                 }
-
-
-
             }
         });
 
@@ -96,6 +99,12 @@ public class MainActivity extends AppCompatActivity {
        if(null != checkUser(Email,Pass)){
 
             String userDB = checkUser( Email,Pass );
+
+           Intent broadcastIntent = new Intent( "My_ACTION" );
+           broadcastIntent.setComponent( new ComponentName( getPackageName(),
+                   "com.example.login.MybroadcastReceiver") );
+
+           getApplicationContext().sendBroadcast( broadcastIntent );
 
             Intent in =new Intent(MainActivity.this, Home.class);
             in.putExtra( "email", userDB);

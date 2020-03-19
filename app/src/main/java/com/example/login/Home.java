@@ -1,13 +1,21 @@
 package com.example.login;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,29 +29,39 @@ import android.widget.Toast;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import java.security.PublicKey;
+
+import static com.example.login.App.CHANNEL_1_ID;
+
 public class Home extends AppCompatActivity {
 
     boolean session;
     private TabLayout tabLayout;
     private AppBarLayout appBarLayout;
     private  ViewPager viewPager;
+    private WifiManager wifiManager;
+    private NotificationManagerCompat notificationManagerCompat;
+    public String textOn = "wifi sedang menyala";
+    public String textOff = "wifi sedang mati";
+
 
     SharedPreferences pref;
 
     @Override
-
-
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         pref = getApplicationContext().getSharedPreferences(  " Mypref", MODE_PRIVATE );
+
+        wifiManager = (WifiManager) getApplicationContext().getSystemService( Context.WIFI_SERVICE );
+        notificationManagerCompat =NotificationManagerCompat.from( this );
+
         SharedPreferences.Editor editor= pref.edit();
         SESSION();
         editor.putString( "KEY1", "Test Shared References" );
         editor.commit();
 
         Log.d("test shared preferences", pref.getString( "KEY1",  null ));
-
 
         setContentView(R.layout.activity_home);
         tabLayout = (TabLayout) findViewById(R.id.tablayout_id);
@@ -54,10 +72,13 @@ public class Home extends AppCompatActivity {
         adapter.AddFragment( new fragment2(), "Fragment_2" );
         adapter.AddFragment( new fragment3(), "Fragment_3" );
 
-         viewPager.setAdapter( adapter );
-         tabLayout.setupWithViewPager( viewPager );
+        viewPager.setAdapter( adapter );
+        tabLayout.setupWithViewPager( viewPager );
 
-
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            String isiBundle;
+        }
 
     }
 
@@ -65,6 +86,7 @@ public class Home extends AppCompatActivity {
 
         Toast.makeText(Home.this, text, Toast.LENGTH_SHORT).show();
     }
+
     public void SESSION (){
         session = Boolean.valueOf( Save.read( getApplicationContext(), "session", "false" ));
             if (!session){
@@ -76,6 +98,69 @@ public class Home extends AppCompatActivity {
                 Toast.makeText( this, "You is Logged In", Toast.LENGTH_SHORT ).show();
 
             }
+
+    }
+
+    protected void onStart(){
+        super.onStart();
+
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiReceiver, intentFilter);
+    }
+    protected void onStop(){
+        super.onStop();
+
+        unregisterReceiver(wifiReceiver);
+    }
+    private BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+            switch(wifiStateExtra){
+                case WifiManager.WIFI_STATE_ENABLED:
+                    kirimNotifikasi();
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED:
+                    kirimNotifikasi();
+                    break;
+            }
+        }
+    };
+
+    public void kirimNotifikasi(){
+        String toastPesan;
+        Intent activityIntent = new Intent(this, Home.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this,0,activityIntent, 0);
+
+        if (wifiManager.isWifiEnabled()){
+            toastPesan = textOn;
+            Intent broadcastIntent = new Intent(this, WifiChangerReceiver.class);
+            broadcastIntent.putExtra("Wifi Changer",toastPesan);
+            PendingIntent actionIntent = PendingIntent.getBroadcast(this,0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification notification = new NotificationCompat.Builder(this,CHANNEL_1_ID)
+                    .setSmallIcon( R.drawable.ic_wifi )
+                    .setContentTitle (  "WIFI STATE" )
+                    .setContentText( textOn )
+                    .setPriority( NotificationCompat.PRIORITY_HIGH )
+                    .setCategory( NotificationCompat.CATEGORY_MESSAGE   )
+                    .addAction(R.mipmap.ic_launcher,"Toast Wifi Status",actionIntent)
+                    .build();
+
+            notificationManagerCompat.notify( 1, notification );
+
+
+        }
+        else{
+            Notification notification = new NotificationCompat.Builder(this,CHANNEL_1_ID)
+                    .setSmallIcon( R.drawable.ic_wifi )
+                    .setContentTitle (  "WIFI STATE" )
+                    .setContentText( textOff )
+                    .setPriority( NotificationCompat.PRIORITY_HIGH )
+                    .setCategory( NotificationCompat.CATEGORY_MESSAGE   )
+                    .build();
+
+            notificationManagerCompat.notify( 1, notification );
+        }
 
     }
 }
