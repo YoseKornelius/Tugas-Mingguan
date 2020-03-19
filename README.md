@@ -1,1 +1,2 @@
-Latihan Minggu Ke empat (fragment) ada di file login dan home 
+Latihan Minggu ke Lima, Login dan Register sqllite dan shared preferences
+
