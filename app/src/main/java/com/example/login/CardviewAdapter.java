@@ -16,7 +16,15 @@ import java.util.ArrayList;
 public class CardviewAdapter extends RecyclerView.Adapter<CardviewAdapter.CardViewHolder> {
     Context context;
     ArrayList<CardviewItem> mCardviewList;
+    private onItemClickListener mlistener;
 
+    public void setOnItemClickListener(onItemClickListener listener){
+        mlistener = listener;
+    }
+
+    public interface onItemClickListener {
+        void onItemClick(int position);
+    }
 
     public CardviewAdapter(ArrayList<CardviewItem> cardViewList,Context context){
         mCardviewList=cardViewList;
@@ -28,7 +36,7 @@ public class CardviewAdapter extends RecyclerView.Adapter<CardviewAdapter.CardVi
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(  parent.getContext()).inflate( R.layout.cardview_item, parent, false );
-        CardViewHolder cvh = new CardViewHolder( view );
+        CardViewHolder cvh = new CardViewHolder( view, mlistener );
         return cvh;
     }
 
@@ -51,12 +59,23 @@ public class CardviewAdapter extends RecyclerView.Adapter<CardviewAdapter.CardVi
         public TextView mTextView1;
         public TextView mTextView2;
 
-        public CardViewHolder(@NonNull View itemView) {
+        public CardViewHolder(@NonNull View itemView, final onItemClickListener listener) {
             super( itemView );
 
             mImageView = itemView.findViewById( R.id.imageView );
             mTextView1 = itemView.findViewById( R.id.textView );
             mTextView2 = itemView.findViewById( R.id.textView2 );
+            itemView.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ((listener != null)) {
+                        int postion = getAdapterPosition();
+                        if (postion != RecyclerView.NO_POSITION){
+                            listener.onItemClick( postion );
+                        }
+                    }
+                }
+            } );
         }
     }
 }

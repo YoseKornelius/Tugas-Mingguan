@@ -1,5 +1,6 @@
 package com.example.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,16 @@ public class fragment2 extends Fragment {
         mRecyclerView.setLayoutManager( new LinearLayoutManager( getActivity() ) );
         //mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setAdapter( mAdapter );
+
+        mAdapter.setOnItemClickListener( new CardviewAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent;
+                intent = new Intent(getActivity(),DetailFilmActivity.class );
+                intent.putExtra( "Example Item", cardviewList.get( position ) );
+                startActivity( intent );
+            }
+        } );
         return view;
     }
 
@@ -42,7 +53,7 @@ public class fragment2 extends Fragment {
         super.onCreate( savedInstanceState );
         cardviewList = new ArrayList<>( );
         cardviewList.add( new CardviewItem(R.drawable.imgfilm1,
-                "Terrace House: BOYS x Girls Next Door",
+                  "Terrace House: BOYS x Girls Next Door",
                 "ini film wibu"));
         cardviewList.add( new CardviewItem(R.drawable.imgfilm2,
                 "Terrace House: BOYS & Girls In The City",

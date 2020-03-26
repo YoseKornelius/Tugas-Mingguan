@@ -4,8 +4,6 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -16,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<!--        <activity android:name=".Home"></activity>-->
+        <activity android:name=".DetailFilmActivity"></activity>
+        <!-- <activity android:name=".Home"></activity> -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,17 +25,14 @@
         </activity>
         <activity
             android:name=".Home"
-            android:label="Home">
-        </activity>
+            android:label="Home"></activity>
         <activity
             android:name=".Register"
-            android:label="Register">
-        </activity>
+            android:label="Register"></activity>
 
-        <service android:name=".MyJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
-
-
+        <service
+            android:name=".MyJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>
