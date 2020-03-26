@@ -37,8 +37,15 @@ public class fragment1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment,container,false);
 
-        btnStart = view.findViewById( R.id.btnStart );
-        btnStop = view.findViewById( R.id.btnStop );
+                return view;
+
+    }
+
+    @Override
+    public void onViewCreated( View view, Bundle savedInstanceState) {
+        super.onViewCreated( view, savedInstanceState );
+        btnStart = (Button) view.findViewById( R.id.btnStart );
+        btnStop = (Button) view.findViewById( R.id.btnStop );
 
         btnStart.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -49,6 +56,8 @@ public class fragment1 extends Fragment {
                         .setPersisted( true )
                         .setPeriodic( 15 * 60 * 1000 )
                         .build();
+
+               
 
                 JobScheduler scheduler = (JobScheduler) getActivity().getSystemService( JOB_SCHEDULER_SERVICE );
                 int resultCode = scheduler.schedule( jobInfo );
@@ -61,7 +70,7 @@ public class fragment1 extends Fragment {
 
 
             }
-        } );
+        });
 
         btnStop.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -72,9 +81,6 @@ public class fragment1 extends Fragment {
             }
         } );
 
-        return view;
 
     }
-
-
 }

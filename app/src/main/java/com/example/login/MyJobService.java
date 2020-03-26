@@ -52,7 +52,7 @@ public class MyJobService extends JobService {
                     }
                 }
                 Toast.makeText(getApplicationContext(),"job finished",Toast.LENGTH_SHORT ).show();
-                jobFinished(params, false);
+                //jobFinished(params, false);
             }
         }).start();
     }
