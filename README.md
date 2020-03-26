@@ -1,2 +1,2 @@
-Latihan Minggu ke Lima, Login dan Register sqllite dan shared preferences
-
+Tambah Recycleview (FILM) , CARDVIEW, DAN PARCEABLE
+MEMUNGKINKAN LIST RECYCLEVIEW BISA DI CLICK UNTUK LIHAT DETAILNYA
