@@ -123,7 +123,7 @@ public class fragment3 extends Fragment {
         Mahasiswa mhs = new Mahasiswa( noMhs.getText().toString(),
                 namaMhs.getText().toString(),
                 phoneMhs.getText().toString());
-        firebaseFirestoreDB.collection( "DaftarMhs" ).document(String.valueOf( noMhs.getText().toString() )).set( mhs )
+        firebaseFirestoreDB.collection( "DaftarMhs" ).document(String.valueOf( noMhs.getText() )).set( mhs )
                 .addOnSuccessListener( new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

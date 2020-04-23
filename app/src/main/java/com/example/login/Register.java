@@ -10,12 +10,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Register extends AppCompatActivity {
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     EditText inputPassword,inputEmail;
     Button  btLogin, btRegister;
+    FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -26,6 +33,12 @@ public class Register extends AppCompatActivity {
         inputPassword = findViewById( R.id.inputPassword );
         btLogin = findViewById( R.id.btLogin );
         btRegister = findViewById( R.id.btRegister );
+        fAuth = FirebaseAuth.getInstance();
+
+        if (fAuth.getCurrentUser() != null){
+            Intent Login = new Intent( Register.this, MainActivity.class);
+            startActivity( Login );
+        }
 
         btRegister.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -51,23 +64,26 @@ public class Register extends AppCompatActivity {
             String Email = inputEmail.getText().toString();
             String Password = inputPassword.getText().toString();
 
-            SQLiteDatabase db = openOrCreateDatabase
-                    ( "user", Context.MODE_PRIVATE, null );
-            db.execSQL( "Create TABLE IF NOT EXISTS user" +
-                    "(id INTEGER PRIMARY KEY AUTOINCREMENT, user VARCHAR,pass VARCHAR)" );
             if(inputEmail.getText().toString().trim().matches(emailPattern)) {
-                String sql = "insert into user(user,pass) values (?,?)";
-                SQLiteStatement statement = db.compileStatement( sql );
-                statement.bindString( 1, Email );
-                statement.bindString( 2, Password );
-                statement.execute();
-                Toast.makeText( this, "Record added", Toast.LENGTH_LONG ).show();
+                fAuth.createUserWithEmailAndPassword( Email, Password )
+                        .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText( Register.this,
+                                            "add firebase sukses", Toast.LENGTH_SHORT ).show();
+                                    Intent Login = new Intent( Register.this, MainActivity.class);
+                                    finish();
+                                    startActivity( Login );
+                                } else {
+                                    Toast.makeText( Register.this,
+                                            task.getException().getMessage(),Toast.LENGTH_SHORT ).show();
+                                }
+                            }
+                        } );
             }else{
                 Toast.makeText(getApplicationContext(),"Invalid email address", Toast.LENGTH_SHORT).show();
             }
-            inputPassword.setText( "" );
-            inputEmail.setText( "" );
-            inputEmail.requestFocus();
 
         }
         catch (Exception ex){

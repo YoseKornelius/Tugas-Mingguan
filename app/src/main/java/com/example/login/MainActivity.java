@@ -23,12 +23,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
     private NotificationManagerCompat notificationManager;
     String email,password;
     Button button1;
     EditText editText; // login
     EditText editText2; //password
+    FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fAuth = FirebaseAuth.getInstance();
                 email = editText.getText().toString();
                 password= editText2.getText().toString();
 
@@ -67,11 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
         //membuat tulisan siqn up clickable
         TextView textview = findViewById(R.id.textView2);
-
         String text = "Belum punya akun gan? skuy SIGN UP";
-
         SpannableString ss = new SpannableString (text);
-
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         ss.setSpan(clickableSpan1, 27,34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE );
-
         textview.setText(ss);
         textview.setMovementMethod(LinkMovementMethod.getInstance());
     }
@@ -93,53 +96,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login(){
-        String Email= editText.getText().toString();
-        String Pass = editText2.getText().toString();
+        fAuth.signInWithEmailAndPassword( email,password )
+                .addOnCompleteListener( MainActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                                Toast.makeText( MainActivity.this, "LOGIN BERHASIL",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent home = new Intent( MainActivity.this,  Home.class);
+                                startActivity( home );
+                                finish();
 
-       if(null != checkUser(Email,Pass)){
-
-            String userDB = checkUser( Email,Pass );
-
-           Intent broadcastIntent = new Intent( "My_ACTION" );
-           broadcastIntent.setComponent( new ComponentName( getPackageName(),
-                   "com.example.login.MybroadcastReceiver") );
-
-           getApplicationContext().sendBroadcast( broadcastIntent );
-
-            Intent in =new Intent(MainActivity.this, Home.class);
-            in.putExtra( "email", userDB);
-            startActivity(in);
-        }
-        else {
-            Toast.makeText
-                    ( this,"Email atau Password kurang tepat",Toast.LENGTH_LONG ).show();
-            editText.setText( "" );
-            editText2.setText( "" );
-            editText.requestFocus();
-        }
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this,
+                                    "Incorrect Email or Password", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } );
 
     }
 
-    public  String checkUser(String Email, String Pass){
-        SQLiteDatabase db = openOrCreateDatabase
-                ( "user", Context.MODE_PRIVATE, null );
-        Cursor cursor = db.rawQuery( "select user,pass from user where user = ? and pass =?",
-                new String[]{Email,Pass} );
-        if(cursor.getCount() > 0){
-            cursor.moveToFirst();
-            String email = cursor.getString( 0 );
-            String password = cursor.getString( 1 );
-            Save.save( getApplicationContext(), "session","true" );
-//            SharedPreferences.Editor sp = getSharedPreferences( "Email",MODE_PRIVATE ).edit();
-//            sp.putString( "email", email );
-//            sp.apply();
-            cursor.close();
-            System.out.println("berhasil");
-            return email;
-
-        }
-        return null;
-
-    }
 
 }
