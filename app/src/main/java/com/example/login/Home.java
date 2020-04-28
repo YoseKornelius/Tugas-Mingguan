@@ -68,9 +68,10 @@ public class Home extends AppCompatActivity {
         appBarLayout = (AppBarLayout) findViewById(R.id.appbarid);
         viewPager = (ViewPager) findViewById( R.id.viewpager_id );
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.AddFragment(new fragment1(), "Fragment_1");
-        adapter.AddFragment( new fragment2(), "Fragment_2" );
-        adapter.AddFragment( new fragment3(), "Fragment_3" );
+        adapter.AddFragment(new fragment1(), "Check Wifi");
+        adapter.AddFragment( new fragment2(), "List Film" );
+        adapter.AddFragment( new fragment3(), "Daftar" );
+        adapter.AddFragment( new fragmentKamera(), "Kamera" );
 
         viewPager.setAdapter( adapter );
         tabLayout.setupWithViewPager( viewPager );
