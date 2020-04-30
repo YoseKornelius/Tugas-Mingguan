@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -46,6 +47,17 @@ public class Home extends AppCompatActivity {
 
 
     SharedPreferences pref;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged( newConfig );
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            Toast.makeText( this,"ORIENTATION LANDSCAPE",Toast.LENGTH_SHORT ).show();
+        }else {
+            Toast.makeText( this,"ORIENTATION POTRAIT",Toast.LENGTH_SHORT ).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
