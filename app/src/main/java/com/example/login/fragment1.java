@@ -8,6 +8,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class fragment1 extends Fragment {
 
     private Button btnStart;
     private Button btnStop;
+    private Button btnCekMap;
 
 
     View view;
@@ -46,6 +48,7 @@ public class fragment1 extends Fragment {
         super.onViewCreated( view, savedInstanceState );
         btnStart = (Button) view.findViewById( R.id.btnStart );
         btnStop = (Button) view.findViewById( R.id.btnStop );
+        btnCekMap = (Button) view.findViewById( R.id.btCekMap );
 
         btnStart.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -81,6 +84,15 @@ public class fragment1 extends Fragment {
             }
         } );
 
+        btnCekMap.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(getActivity(),CheckLocation.class );
+                startActivity( intent );
+            }
+            });
+        }
+
 
     }
-}

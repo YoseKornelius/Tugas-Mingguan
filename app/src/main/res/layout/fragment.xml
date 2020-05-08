@@ -29,4 +29,20 @@
         </androidx.appcompat.widget.AppCompatButton>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btCekMap"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:text="CEK CURRENT LOCATION">
+
+        </Button>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 </LinearLayout>
